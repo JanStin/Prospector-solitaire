@@ -3,7 +3,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class CardDefinition
 {
-    public string Face { get; set; }
-    public int Rank { get; set; }
+    public string Face;
+    public int Rank;
     public List<Decorator> Pips = new List<Decorator>();
 }

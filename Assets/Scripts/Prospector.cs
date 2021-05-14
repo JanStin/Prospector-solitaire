@@ -10,10 +10,10 @@ public class Prospector : MonoBehaviour
     static public Prospector S;
 
     [Header("Set in Inspector")]
-    public TextAsset deckXML;
+    public TextAsset DeckXML;
 
     [Header("Set Dynamically")]
-    public Deck deck;
+    public Deck Deck;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class Prospector : MonoBehaviour
 
     private void Start()
     {
-        deck = GetComponent<Deck>();
-        deck.InitDeck(deckXML.text);
+        Deck = GetComponent<Deck>();
+        Deck.InitDeck(DeckXML.text);
     }
 }
