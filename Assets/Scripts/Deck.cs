@@ -6,6 +6,24 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
+    [Header("Set in Inspector")]
+    public Sprite SuitClub;
+    public Sprite SuitDiamond;
+    public Sprite SuitHeart;
+    public Sprite SuitSpade;
+
+    public Sprite[] FaceSprites;
+    public Sprite[] RankSprites;
+
+    public Sprite CardBack;
+    public Sprite CardBackGold;
+    public Sprite CardFrone;
+    public Sprite CardFrontGold;
+
+    public GameObject PrefabCard;
+    public GameObject PrefabSprite;
+
+
     [Header("Set Dynamically")]
     public PT_XMLReader XmlReader;
     public List<string> CardNames;
@@ -24,13 +42,6 @@ public class Deck : MonoBehaviour
     {
         XmlReader = new PT_XMLReader();
         XmlReader.Parse(deckXMLText);
-
-        // Output for test.
-        //string s = $"xml[0] decoration[0] type={XmlReader.xml["xml"][0]["decorator"][0].att("type")}" +
-        //    $"\nx={XmlReader.xml["xml"][0]["decorator"][0].att("x")}" +
-        //    $"\ny={XmlReader.xml["xml"][0]["decorator"][0].att("y")}" +
-        //    $"\nscale={XmlReader.xml["xml"][0]["decorator"][0].att("scale")}";
-        //print(s);
 
         Decorators = new List<Decorator>();
 
