@@ -7,6 +7,8 @@ using UnityEngine;
 public class Deck : MonoBehaviour
 {
     [Header("Set in Inspector")]
+    public bool StartFaceUp = false;
+
     public Sprite SuitClub;
     public Sprite SuitDiamond;
     public Sprite SuitHeart;
@@ -173,6 +175,7 @@ public class Deck : MonoBehaviour
         AddDecorators(card);
         AddPips(card);
         AddFace(card);
+        AddBack(card);
 
         return card;
     }
@@ -279,5 +282,23 @@ public class Deck : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void AddBack(Card card)
+    {
+        _tGO = Instantiate(PrefabSprite) as GameObject;
+        _tSR = _tGO.GetComponent<SpriteRenderer>();
+        
+        _tSR.sprite = CardBack;
+        
+        _tGO.transform.SetParent(card.transform);
+        _tGO.transform.localPosition = Vector3.zero;
+
+        _tSR.sortingOrder = 2;
+
+        _tGO.name = "back";
+        card.Back = _tGO;
+
+        card.FaceUp = StartFaceUp;
     }
 }
