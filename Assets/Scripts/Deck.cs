@@ -93,15 +93,15 @@ public class Deck : MonoBehaviour
                 {
                     deco = new Decorator();
                     deco.Type = "pip";
-                    deco.Flip = xPips[i].att("flip").Equals("1");
+                    deco.Flip = xPips[j].att("flip").Equals("1");
 
-                    deco.Location.x = float.Parse(xPips[i].att("x"), CultureInfo.InvariantCulture);
-                    deco.Location.y = float.Parse(xPips[i].att("y"), CultureInfo.InvariantCulture);
-                    deco.Location.z = float.Parse(xPips[i].att("z"), CultureInfo.InvariantCulture);
+                    deco.Location.x = float.Parse(xPips[j].att("x"), CultureInfo.InvariantCulture);
+                    deco.Location.y = float.Parse(xPips[j].att("y"), CultureInfo.InvariantCulture);
+                    deco.Location.z = float.Parse(xPips[j].att("z"), CultureInfo.InvariantCulture);
 
                     if (xPips[j].HasAtt("scale"))
                     {
-                        deco.Scale = float.Parse(xPips[i].att("scale"), CultureInfo.InvariantCulture);
+                        deco.Scale = float.Parse(xPips[j].att("scale"), CultureInfo.InvariantCulture);
                     }
 
                     cDef.Pips.Add(deco);
