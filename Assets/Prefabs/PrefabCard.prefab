@@ -96,6 +96,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc5a574850f1e746b7544358eae5aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Suit: 
+  Rank: 0
+  Color: {r: 0, g: 0, b: 0, a: 1}
+  ColorName: Black
+  DecoratorGOs: []
+  PipGos: []
+  Back: {fileID: 0}
+  Def:
+    Face: 
+    Rank: 0
+    Pips: []
 --- !u!65 &618099150403429265
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Set Dynamically")]
+    public string Suit;
+    public int Rank;
+    public Color Color = Color.black;
+    public string ColorName = "Black";
+    
+    public List<GameObject> DecoratorGOs = new List<GameObject>();
+    public List<GameObject> PipGos = new List<GameObject>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject Back;
+    public CardDefinition Def;
 }

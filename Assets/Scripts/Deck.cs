@@ -31,11 +31,27 @@ public class Deck : MonoBehaviour
     public List<Decorator> Decorators;
     public List<CardDefinition> CardDefinitions;
     public Transform DeckAnchor;
-    public Dictionary<string, Sprite> DictSuits;
+    public Dictionary<string, Sprite> DictionarySuits;
 
     public void InitDeck(string deckXMLText)
-    {
+    {        
+        if (GameObject.Find("_Deck") == null)
+        {
+            GameObject anchorGO = new GameObject("_Deck");
+            DeckAnchor = anchorGO.transform;
+        }
+
+        DictionarySuits = new Dictionary<string, Sprite>()
+        {
+            { "C", SuitClub },
+            { "D", SuitDiamond },
+            { "H", SuitHeart },
+            { "S", SuitSpade }
+        };
+
         ReadDeck(deckXMLText);
+
+        MakeCards();
     }
 
     public void ReadDeck(string deckXMLText)
@@ -99,5 +115,169 @@ public class Deck : MonoBehaviour
 
             CardDefinitions.Add(cDef);
         }
+    }
+
+    public CardDefinition GetCardDefinitionByRank(int rank)
+    {
+        foreach (CardDefinition card in CardDefinitions)
+        {
+            if (card.Rank.Equals(rank))
+            {
+                return card;
+            }
+        }
+        return null;
+    }
+
+    public void MakeCards()
+    {
+        CardNames = new List<string>();
+        string[] letters = new string[] { "C", "D", "H", "S" };
+        foreach (string s in letters)
+        {
+            for (int i = 1; i <= 13; i++)
+            {
+                CardNames.Add(s + i);
+            }
+        }
+
+        Cards = new List<Card>();
+        for (int i = 0; i < CardNames.Count; i++)
+        {
+            Cards.Add(MakeCard(i));
+        }
+    }
+
+    private Card MakeCard(int cNum)
+    {
+        GameObject cardGO = Instantiate(PrefabCard) as GameObject;
+        cardGO.transform.parent = DeckAnchor;
+
+        Card card = cardGO.GetComponent<Card>();
+
+        // Cards in row
+        cardGO.transform.localPosition = new Vector3((cNum % 13) * 3, cNum / 13 * 4, 0);
+
+        card.name = CardNames[cNum];
+        card.Suit = card.name[0].ToString();
+        card.Rank = int.Parse(card.name.Substring(1));
+
+        if (card.Suit.Equals("D") || card.Suit.Equals("H"))
+        {
+            card.ColorName = "Red";
+            card.Color = Color.red;
+        }
+
+        card.Def = GetCardDefinitionByRank(card.Rank);
+
+        AddDecorators(card);
+        AddPips(card);
+        AddFace(card);
+
+        return card;
+    }
+
+    private Sprite _tSp = null;
+    private GameObject _tGO = null;
+    private SpriteRenderer _tSR = null;
+
+    private void AddDecorators(Card card)
+    {
+        foreach (Decorator decorator in Decorators)
+        {
+            _tGO = Instantiate(PrefabSprite) as GameObject;
+            _tSR = _tGO.GetComponent<SpriteRenderer>();
+
+            if (decorator.Type.Equals("suit"))
+            {                
+                _tSR.sprite = DictionarySuits[card.Suit];
+            }
+            else
+            {
+                _tSp = RankSprites[card.Rank];
+                _tSR.sprite = _tSp;
+                _tSR.color = card.Color;
+            }
+
+            _tSR.sortingOrder = 1;
+
+            _tGO.transform.SetParent(card.transform);
+
+            _tGO.transform.localPosition = decorator.Location;
+
+            if (decorator.Flip)
+            {
+                _tGO.transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+
+            if (decorator.Scale != 1)
+            {
+                _tGO.transform.localScale = Vector3.one * decorator.Scale;
+            }
+
+            _tGO.name = decorator.Type;
+
+            card.DecoratorGOs.Add(_tGO);
+        }
+    }
+
+    private void AddPips(Card card)
+    {
+        foreach (Decorator pip in card.Def.Pips)
+        {
+            _tGO = Instantiate(PrefabSprite) as GameObject; 
+            _tSR = _tGO.GetComponent<SpriteRenderer>();
+
+            _tGO.transform.SetParent(card.transform);
+            _tGO.transform.localPosition = pip.Location;
+
+            if (pip.Flip)
+            {
+                _tGO.transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+
+            if (pip.Scale != 1)
+            {
+                _tGO.transform.localScale = Vector3.one * pip.Scale;
+            }
+
+            _tGO.name = "pip";
+
+            _tSR.sprite = DictionarySuits[card.Suit];
+            _tSR.sortingOrder = 1;
+            card.PipGos.Add(_tGO);
+        }
+    }
+
+    private void AddFace(Card card)
+    {
+        if (card.Def.Face == "")
+        {
+            return;
+        }
+
+        _tGO = Instantiate(PrefabSprite) as GameObject;
+        _tSR = _tGO.GetComponent<SpriteRenderer>();
+
+        _tSp = GetFace(card.Def.Face + card.Suit);
+
+        _tSR.sprite = _tSp;
+        _tSR.sortingOrder = 1;
+        _tGO.transform.SetParent(card.transform);
+        _tGO.transform.localPosition = Vector3.zero;
+        _tGO.name = "face";
+    }
+
+    private Sprite GetFace(string face)
+    {
+        foreach (Sprite sprite in FaceSprites)
+        {
+            if (sprite.name == face)
+            {
+                return sprite;
+            }
+        }
+
+        return null;
     }
 }
