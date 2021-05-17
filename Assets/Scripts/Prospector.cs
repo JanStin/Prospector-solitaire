@@ -24,5 +24,14 @@ public class Prospector : MonoBehaviour
     {
         Deck = GetComponent<Deck>();
         Deck.InitDeck(DeckXML.text);
+        
+        Deck.Shuffle(ref Deck.Cards);
+
+        Card tempCard;
+        for (int i = 0; i < Deck.Cards.Count; i++)
+        {
+            tempCard = Deck.Cards[i];
+            tempCard.transform.localPosition = new Vector3(i % 13 * 3, i / 13 * 4, 0);
+        }
     }
 }

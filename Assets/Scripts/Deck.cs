@@ -301,4 +301,23 @@ public class Deck : MonoBehaviour
 
         card.FaceUp = StartFaceUp;
     }
+
+    static public void Shuffle(ref List<Card> cards)
+    {
+        List<Card> tempCards = new List<Card>();
+
+        int index;
+        System.Random random = new System.Random();
+        
+        while (cards.Count > 0)
+        {
+            index = random.Next(0, cards.Count);
+
+            tempCards.Add(cards[index]);
+
+            cards.RemoveAt(index);
+        }
+
+        cards = tempCards;
+    }
 }
