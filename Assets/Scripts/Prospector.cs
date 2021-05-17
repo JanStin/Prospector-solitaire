@@ -11,9 +11,11 @@ public class Prospector : MonoBehaviour
 
     [Header("Set in Inspector")]
     public TextAsset DeckXML;
+    public TextAsset LayoutXML;
 
     [Header("Set Dynamically")]
     public Deck Deck;
+    public Layout Layout;
 
     private void Awake()
     {
@@ -27,11 +29,7 @@ public class Prospector : MonoBehaviour
         
         Deck.Shuffle(ref Deck.Cards);
 
-        Card tempCard;
-        for (int i = 0; i < Deck.Cards.Count; i++)
-        {
-            tempCard = Deck.Cards[i];
-            tempCard.transform.localPosition = new Vector3(i % 13 * 3, i / 13 * 4, 0);
-        }
+        Layout = GetComponent<Layout>();
+        Layout.ReadLayout(LayoutXML.text);
     }
 }
