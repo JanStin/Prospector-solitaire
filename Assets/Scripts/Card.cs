@@ -24,7 +24,7 @@ public class Card : MonoBehaviour
         }
         set
         {
-            Back.SetActive(value);
+            Back.SetActive(!value);
         }
     }
 }
