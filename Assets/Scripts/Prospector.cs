@@ -97,6 +97,9 @@ public class Prospector : MonoBehaviour
 
             Tableau.Add(cardProspector);
         }
+
+        MoveToTarget(Draw());
+        UpdateDrawPile();
     }
 
     private void MoveToDiscard(CardProspector card)
@@ -164,5 +167,23 @@ public class Prospector : MonoBehaviour
         }
     }
 
+    public void CardClicked(CardProspector card)
+    {
+        switch (card.State)
+        {
+            case eCardState.target:
+                // ignore
+                break;
 
+            case eCardState.drawpile:
+                MoveToDiscard(Target);
+                MoveToTarget(Draw());
+                UpdateDrawPile();
+                break;
+
+            case eCardState.tableau:
+                // late
+                break;
+        }
+    }
 }
