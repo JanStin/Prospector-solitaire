@@ -9,4 +9,10 @@ public class CardProspector : Card
     public List<CardProspector> HiddenBy = new List<CardProspector>();
     public int LayoutID;
     public SlotDef SlotDef;
+
+    public override void OnMouseUpAsButton()
+    {
+        Prospector.S.CardClicked(this);
+        base.OnMouseUpAsButton();
+    }
 }

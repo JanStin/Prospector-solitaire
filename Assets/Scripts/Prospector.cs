@@ -98,4 +98,71 @@ public class Prospector : MonoBehaviour
             Tableau.Add(cardProspector);
         }
     }
+
+    private void MoveToDiscard(CardProspector card)
+    {
+        card.State = eCardState.discard;
+        DiscardPile.Add(card);
+        
+        card.transform.parent = LayoutAnchor;
+        card.transform.localPosition = new Vector3(
+            Layout.Multiplier.x * Layout.DiscardPile.X,
+            Layout.Multiplier.y * Layout.DiscardPile.Y,
+            -Layout.DiscardPile.LayerID + 0.5f
+            );
+
+        card.FaceUp = true;
+
+        card.SetSortingLayerName(Layout.DiscardPile.LayerName);
+        card.SetSortOrder(-100 + DiscardPile.Count);
+    }
+
+    private void MoveToTarget(CardProspector card)
+    {
+        if (Target != null)
+        {
+            MoveToDiscard(card);
+        }
+
+        Target = card;
+        card.State = eCardState.target;
+
+        card.transform.parent = LayoutAnchor;
+        card.transform.localPosition = new Vector3(
+            Layout.Multiplier.x * Layout.DiscardPile.X,
+            Layout.Multiplier.y * Layout.DiscardPile.Y,
+            -Layout.DiscardPile.LayerID
+            );
+
+        card.FaceUp = true;
+        card.SetSortingLayerName(Layout.DiscardPile.LayerName);
+        card.SetSortOrder(0);
+    }
+
+    private void UpdateDrawPile()
+    {
+        CardProspector card;
+
+        for (int i = 0; i < DrawPile.Count; i++)
+        {
+            card = DrawPile[i];
+            card.transform.parent = LayoutAnchor;
+
+            Vector2 dpStagger = Layout.DrawPile.Stagger;
+
+            card.transform.localPosition = new Vector3(
+            Layout.Multiplier.x * (Layout.DiscardPile.X + i * dpStagger.x),
+            Layout.Multiplier.y * (Layout.DiscardPile.Y + i * dpStagger.y),
+            -Layout.DiscardPile.LayerID + 0.1f * i
+            );
+
+            card.FaceUp = false;
+            card.State = eCardState.drawpile;
+
+            card.SetSortingLayerName(Layout.DrawPile.LayerName);
+            card.SetSortOrder(-10 * i);
+        }
+    }
+
+
 }
