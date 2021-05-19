@@ -92,6 +92,9 @@ public class Prospector : MonoBehaviour
             cardProspector.SlotDef = tempSD;
 
             cardProspector.State = eCardState.tableau;
+
+            cardProspector.SetSortingLayerName(tempSD.LayerName);
+
             Tableau.Add(cardProspector);
         }
     }
