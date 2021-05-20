@@ -182,8 +182,53 @@ public class Prospector : MonoBehaviour
                 break;
 
             case eCardState.tableau:
-                // late
+                bool validMatch = true;
+                
+                if (!card.FaceUp)
+                {
+                    validMatch = false;
+                }
+
+                if (!AdjacentRank(card, Target))
+                {
+                    validMatch = false;
+                }
+
+                if (!validMatch)
+                {
+                    return;
+                }
+
+                Tableau.Remove(card);
+                MoveToTarget(card);
+
                 break;
         }
+    }
+
+
+    public bool AdjacentRank(CardProspector cardOne, CardProspector cardTwo)
+    {
+        if (!cardOne.FaceUp || !cardTwo.FaceUp)
+        {
+            return false;
+        }
+
+        if (Mathf.Abs(cardOne.Rank - cardTwo.Rank) == 1)
+        {
+            return true;
+        }
+
+        if (cardOne.Rank.Equals(1) && cardTwo.Rank.Equals(13))
+        {
+            return true;
+        }
+
+        if (cardTwo.Rank.Equals(1) && cardOne.Rank.Equals(13))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

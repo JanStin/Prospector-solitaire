@@ -297,7 +297,7 @@ MonoBehaviour:
   DeckXML: {fileID: 4900000, guid: c76312a0fb08948699e1abf935e4a957, type: 3}
   LayoutXML: {fileID: 4900000, guid: 61f3f05951a2f4d98b35bddbc7549908, type: 3}
   XOffset: 3
-  YOffset: -2.5
+  YOffset: -22.5
   LayoutCenter: {x: 0, y: 0, z: 0}
   Deck: {fileID: 0}
   Layout: {fileID: 0}
