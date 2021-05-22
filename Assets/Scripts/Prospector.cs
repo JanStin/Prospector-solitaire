@@ -98,6 +98,15 @@ public class Prospector : MonoBehaviour
             Tableau.Add(cardProspector);
         }
 
+        foreach (CardProspector tempCP in Tableau)
+        {
+            foreach (int hid in tempCP.SlotDef.HiddenBy)
+            {
+                cardProspector = FindCardByLayoutID(hid);
+                tempCP.HiddenBy.Add(cardProspector);
+            }
+        }
+
         MoveToTarget(Draw());
         UpdateDrawPile();
     }
@@ -117,7 +126,7 @@ public class Prospector : MonoBehaviour
         card.FaceUp = true;
 
         card.SetSortingLayerName(Layout.DiscardPile.LayerName);
-        card.SetSortOrder(-100 + DiscardPile.Count);
+        card.SetSortOrder(-110 + DiscardPile.Count);
     }
 
     private void MoveToTarget(CardProspector card)
@@ -167,6 +176,37 @@ public class Prospector : MonoBehaviour
         }
     }
 
+    private CardProspector FindCardByLayoutID(int layoutID)
+    {
+        foreach (CardProspector tempCP in Tableau)
+        {
+            if (tempCP.LayoutID.Equals(layoutID))
+            {
+                return tempCP;
+            }
+        }
+
+        return null;
+    }
+
+    private void SetTableauFaces()
+    {
+        foreach (CardProspector cardProspector in Tableau)
+        {
+            bool faceUp = true;
+
+            foreach (CardProspector cover in cardProspector.HiddenBy)
+            {
+                if (cover.State.Equals(eCardState.tableau))
+                {
+                    faceUp = false;
+                }
+            }
+
+            cardProspector.FaceUp = faceUp;
+        }
+    }
+
     public void CardClicked(CardProspector card)
     {
         switch (card.State)
@@ -202,11 +242,11 @@ public class Prospector : MonoBehaviour
                 MoveToDiscard(Target);
                 Tableau.Remove(card);
                 MoveToTarget(card);
+                SetTableauFaces();
 
                 break;
         }
     }
-
 
     public bool AdjacentRank(CardProspector cardOne, CardProspector cardTwo)
     {
