@@ -109,8 +109,8 @@ public class Prospector : MonoBehaviour
         
         card.transform.parent = LayoutAnchor;
         card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * Layout.DiscardPile.X,
-            Layout.Multiplier.y * Layout.DiscardPile.Y,
+            Layout.Multiplier.x * Layout.DiscardPile.X - 2,
+            Layout.Multiplier.y * Layout.DiscardPile.Y + 1.5f,
             -Layout.DiscardPile.LayerID + 0.5f
             );
 
@@ -132,8 +132,8 @@ public class Prospector : MonoBehaviour
 
         card.transform.parent = LayoutAnchor;
         card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * Layout.DiscardPile.X,
-            Layout.Multiplier.y * Layout.DiscardPile.Y,
+            Layout.Multiplier.x * Layout.DiscardPile.X - 2,
+            Layout.Multiplier.y * Layout.DiscardPile.Y + 1.5f,
             -Layout.DiscardPile.LayerID
             );
 
@@ -154,8 +154,8 @@ public class Prospector : MonoBehaviour
             Vector2 dpStagger = Layout.DrawPile.Stagger;
 
             card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * (Layout.DiscardPile.X + i * dpStagger.x),
-            Layout.Multiplier.y * (Layout.DiscardPile.Y + i * dpStagger.y),
+            Layout.Multiplier.x * (Layout.DiscardPile.X + 1 + i * dpStagger.x),
+            Layout.Multiplier.y * (Layout.DiscardPile.Y + 1 + i * dpStagger.y),
             -Layout.DiscardPile.LayerID + 0.1f * i
             );
 
@@ -199,6 +199,7 @@ public class Prospector : MonoBehaviour
                     return;
                 }
 
+                MoveToDiscard(Target);
                 Tableau.Remove(card);
                 MoveToTarget(card);
 
