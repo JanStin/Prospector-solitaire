@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Prospector : MonoBehaviour
 {
-    // TODO: rename this variable;
     static public Prospector S;
 
     [Header("Set in Inspector")]
@@ -219,6 +218,7 @@ public class Prospector : MonoBehaviour
                 MoveToDiscard(Target);
                 MoveToTarget(Draw());
                 UpdateDrawPile();
+                ScoreManager.ScoreEvent(eScoreEvent.draw);
                 break;
 
             case eCardState.tableau:
@@ -243,9 +243,12 @@ public class Prospector : MonoBehaviour
                 Tableau.Remove(card);
                 MoveToTarget(card);
                 SetTableauFaces();
+                ScoreManager.ScoreEvent(eScoreEvent.mine);
 
                 break;
         }
+
+        CheckForGameOver();
     }
 
     public bool AdjacentRank(CardProspector cardOne, CardProspector cardTwo)
@@ -271,5 +274,44 @@ public class Prospector : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void CheckForGameOver()
+    {
+        if (Tableau.Count.Equals(0))
+        {
+            GameOver(true);
+            return;
+        }
+
+        if (DrawPile.Count > 0)
+        {
+            return;
+        }
+
+        // Checking the allowed moves.
+        foreach (CardProspector card in Tableau)
+        {
+            if (AdjacentRank(card, Target))
+            {
+                return;
+            }
+        }
+
+        GameOver(false);
+    }
+
+    private void GameOver(bool won)
+    {
+        if (won)
+        {
+            ScoreManager.ScoreEvent(eScoreEvent.gameWin);
+        }
+        else
+        {
+            ScoreManager.ScoreEvent(eScoreEvent.gameLose);
+        }
+
+        SceneManager.LoadScene("SampleScene");
     }
 }
