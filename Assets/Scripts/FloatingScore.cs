@@ -93,7 +93,7 @@ public class FloatingScore : MonoBehaviour
 
                 if (ReportFinishTo != null)
                 {
-                    ReportFinishTo.SendMessage("FSCallbak", this);
+                    ReportFinishTo.SendMessage("FSCallback", this);
                     Destroy(gameObject);
                 }
                 else

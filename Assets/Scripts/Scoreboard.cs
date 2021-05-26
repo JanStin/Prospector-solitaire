@@ -25,7 +25,7 @@ public class Scoreboard : MonoBehaviour
         set
         {
             _score = value;
-            _scoreString = _score.ToString("N0");
+            ScoreString = _score.ToString("N0");
         }
     }
 
@@ -63,6 +63,7 @@ public class Scoreboard : MonoBehaviour
     public FloatingScore CreateFloatingScore(int amt, List<Vector2> pts)
     {
         GameObject gmObject = Instantiate<GameObject>(PrefabFloatingScore);
+        gmObject.transform.SetParent(_canvasTrans);
         FloatingScore floatingScore = gmObject.GetComponent<FloatingScore>();
         floatingScore.Score = amt;
         floatingScore.ReportFinishTo = this.gameObject;

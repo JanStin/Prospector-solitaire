@@ -14,6 +14,10 @@ public class Prospector : MonoBehaviour
     public float XOffset = 3;
     public float YOffset = -2.5f;
     public Vector3 LayoutCenter;
+    public Vector2 FsPosMid = new Vector2(0.5f, 0.9f);
+    public Vector2 FsPosRun = new Vector2(0.5f, 0.75f);
+    public Vector2 FsPosMidTwo = new Vector2(0.4f, 1f);
+    public Vector2 FsPosEnd = new Vector2(0.5f, 0.95f);
 
     [Header("Set Dynamically")]
     public Deck Deck;
@@ -23,6 +27,7 @@ public class Prospector : MonoBehaviour
     public CardProspector Target;
     public List<CardProspector> Tableau;
     public List<CardProspector> DiscardPile;
+    public FloatingScore FsRun;
 
     private void Awake()
     {
@@ -31,9 +36,11 @@ public class Prospector : MonoBehaviour
 
     private void Start()
     {
+        Scoreboard.S.Score = ScoreManager.Score;
+
         Deck = GetComponent<Deck>();
         Deck.InitDeck(DeckXML.text);
-        
+
         Deck.Shuffle(ref Deck.Cards);
 
         Layout = GetComponent<Layout>();
@@ -114,7 +121,7 @@ public class Prospector : MonoBehaviour
     {
         card.State = eCardState.discard;
         DiscardPile.Add(card);
-        
+
         card.transform.parent = LayoutAnchor;
         card.transform.localPosition = new Vector3(
             Layout.Multiplier.x * Layout.DiscardPile.X - 2,
@@ -219,11 +226,12 @@ public class Prospector : MonoBehaviour
                 MoveToTarget(Draw());
                 UpdateDrawPile();
                 ScoreManager.ScoreEvent(eScoreEvent.draw);
+                FloatingScoreHandler(eScoreEvent.draw);
                 break;
 
             case eCardState.tableau:
                 bool validMatch = true;
-                
+
                 if (!card.FaceUp)
                 {
                     validMatch = false;
@@ -244,7 +252,7 @@ public class Prospector : MonoBehaviour
                 MoveToTarget(card);
                 SetTableauFaces();
                 ScoreManager.ScoreEvent(eScoreEvent.mine);
-
+                FloatingScoreHandler(eScoreEvent.mine);
                 break;
         }
 
@@ -306,12 +314,65 @@ public class Prospector : MonoBehaviour
         if (won)
         {
             ScoreManager.ScoreEvent(eScoreEvent.gameWin);
+            FloatingScoreHandler(eScoreEvent.gameWin);
         }
         else
         {
             ScoreManager.ScoreEvent(eScoreEvent.gameLose);
+            FloatingScoreHandler(eScoreEvent.gameLose);
         }
 
         SceneManager.LoadScene("SampleScene");
     }
+
+    private void FloatingScoreHandler(eScoreEvent evt)
+    {
+        List<Vector2> fsPts = new List<Vector2>();
+
+        switch (evt)
+        {
+            case eScoreEvent.draw:
+            case eScoreEvent.gameLose:
+            case eScoreEvent.gameWin:
+                if (FsRun != null)
+                {
+                    fsPts.Add(FsPosRun);
+                    fsPts.Add(FsPosMidTwo);
+                    fsPts.Add(FsPosEnd);
+                    FsRun.ReportFinishTo = Scoreboard.S.gameObject;
+                    FsRun.Init(fsPts, 0, 1);
+                    FsRun.FontSizes = new List<float>(new float[] { 28, 36, 4 });
+                    FsRun = null;
+                }
+
+                break;
+
+            case eScoreEvent.mine:
+                FloatingScore floatingScore;
+
+                Vector2 pZero = Input.mousePosition;
+                pZero.x /= Screen.width;
+                pZero.y /= Screen.height;
+
+                fsPts.Add(pZero);
+                fsPts.Add(FsPosMid);
+                fsPts.Add(FsPosRun);
+
+                floatingScore = Scoreboard.S.CreateFloatingScore(ScoreManager.Chain, fsPts);
+                floatingScore.FontSizes = new List<float>(new float[] { 4, 50, 28 });
+
+                if (FsRun == null)
+                {
+                    FsRun = floatingScore;
+                    FsRun.ReportFinishTo = null;
+                }
+                else
+                {
+                    floatingScore.ReportFinishTo = FsRun.gameObject;
+                }
+
+                break;
+        }
+    }
+
 }

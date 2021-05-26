@@ -300,6 +300,10 @@ MonoBehaviour:
   XOffset: 3
   YOffset: -22.5
   LayoutCenter: {x: 0, y: 0, z: 0}
+  FsPosMid: {x: 0.5, y: 0.9}
+  FsPosRun: {x: 0.5, y: 0.75}
+  FsPosMidTwo: {x: 0.4, y: 1}
+  FsPosEnd: {x: 0.5, y: 0.95}
   Deck: {fileID: 0}
   Layout: {fileID: 0}
   DrawPile: []
@@ -307,6 +311,7 @@ MonoBehaviour:
   Target: {fileID: 0}
   Tableau: []
   DiscardPile: []
+  FsRun: {fileID: 0}
 --- !u!212 &519420035
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -612,9 +617,9 @@ RectTransform:
   m_Father: {fileID: 1683638997}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 200, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1933549348

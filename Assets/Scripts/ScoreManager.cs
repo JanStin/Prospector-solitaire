@@ -28,6 +28,14 @@ public class ScoreManager : MonoBehaviour
         {
             Debug.LogError("Error: ScoreManager.Awake(): _scoreManager is already set!");
         }
+
+        if (PlayerPrefs.HasKey("ProspectorHighScore"))
+        {
+            HighScore = PlayerPrefs.GetInt("ProspectorHighScore");
+        }
+
+        _score += ScoreFromPrevRound;
+        ScoreFromPrevRound = 0;
     }
 
     static public void ScoreEvent(eScoreEvent evt)
@@ -62,21 +70,17 @@ public class ScoreManager : MonoBehaviour
 
         switch (cardState)
         {
-            case eScoreEvent.gameWin:
-                _score += PlayerPrefs.GetInt("ProspectorScore");
+            case eScoreEvent.gameWin:          
                 ScoreFromPrevRound = _score;
-                PlayerPrefs.SetInt("ProspectorScore", _score);
                 print("You won this round! Round score: " + ScoreFromPrevRound);
                 break;
 
             case eScoreEvent.gameLose:
                 if (HighScore <= _score)
                 {
-                    _score += PlayerPrefs.GetInt("ProspectorScore");
                     print("New higt score: " + _score);
                     HighScore = _score;
                     PlayerPrefs.SetInt("ProspectorHighScore", _score);
-                    PlayerPrefs.SetInt("ProspectorScore", 0);
                 }
                 else
                 {
