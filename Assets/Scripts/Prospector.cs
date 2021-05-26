@@ -124,7 +124,7 @@ public class Prospector : MonoBehaviour
 
         card.transform.parent = LayoutAnchor;
         card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * Layout.DiscardPile.X - 2,
+            Layout.Multiplier.x * Layout.DiscardPile.X,
             Layout.Multiplier.y * Layout.DiscardPile.Y + 1.5f,
             -Layout.DiscardPile.LayerID + 0.5f
             );
@@ -147,7 +147,7 @@ public class Prospector : MonoBehaviour
 
         card.transform.parent = LayoutAnchor;
         card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * Layout.DiscardPile.X - 2,
+            Layout.Multiplier.x * Layout.DiscardPile.X,
             Layout.Multiplier.y * Layout.DiscardPile.Y + 1.5f,
             -Layout.DiscardPile.LayerID
             );
@@ -169,8 +169,8 @@ public class Prospector : MonoBehaviour
             Vector2 dpStagger = Layout.DrawPile.Stagger;
 
             card.transform.localPosition = new Vector3(
-            Layout.Multiplier.x * (Layout.DiscardPile.X + 1 + i * dpStagger.x),
-            Layout.Multiplier.y * (Layout.DiscardPile.Y + 1 + i * dpStagger.y),
+            Layout.Multiplier.x * (Layout.DiscardPile.X + 5.9f + i * dpStagger.x),
+            Layout.Multiplier.y * (Layout.DiscardPile.Y + 4f + i * dpStagger.y),
             -Layout.DiscardPile.LayerID + 0.1f * i
             );
 
