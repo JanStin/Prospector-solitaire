@@ -18,6 +18,10 @@ public class Prospector : MonoBehaviour
     public Vector2 FsPosRun = new Vector2(0.5f, 0.75f);
     public Vector2 FsPosMidTwo = new Vector2(0.4f, 1f);
     public Vector2 FsPosEnd = new Vector2(0.5f, 0.95f);
+    public float ReloadDelay = 2f;
+    public Text GameOverText;
+    public Text RoundResultText;
+    public Text HighScoreText;
 
     [Header("Set Dynamically")]
     public Deck Deck;
@@ -32,6 +36,7 @@ public class Prospector : MonoBehaviour
     private void Awake()
     {
         S = this;
+        SetUpUIText();
     }
 
     private void Start()
@@ -311,17 +316,46 @@ public class Prospector : MonoBehaviour
 
     private void GameOver(bool won)
     {
+        int score = ScoreManager.Score;
+
+        if (FsRun != null)
+        {
+            score += FsRun.Score;
+        }
+
+
         if (won)
         {
+            GameOverText.text = "Round Over";
+            RoundResultText.text = "You won this round!\nRound score: " + score;
+            ShowResultsUI(true);
+
             ScoreManager.ScoreEvent(eScoreEvent.gameWin);
             FloatingScoreHandler(eScoreEvent.gameWin);
         }
         else
         {
+            GameOverText.text = "Game Over";
+            if (ScoreManager.HighScore <= score)
+            {
+                string str = "You got the high score!\nHigh score: " + score;
+                RoundResultText.text = str;
+            }
+            else
+            {
+                RoundResultText.text = "Your final sore was: " + score;
+            }
+            ShowResultsUI(true);
+
             ScoreManager.ScoreEvent(eScoreEvent.gameLose);
             FloatingScoreHandler(eScoreEvent.gameLose);
         }
 
+        Invoke("ReloadScene", ReloadDelay);
+    }
+
+    private void ReloadScene()
+    {
         SceneManager.LoadScene("SampleScene");
     }
 
@@ -375,4 +409,36 @@ public class Prospector : MonoBehaviour
         }
     }
 
+    private void SetUpUIText()
+    {
+        GameObject go = GameObject.Find("Label High Score");
+        if (go != null)
+        {
+            HighScoreText = go.GetComponent<Text>();
+        }
+
+        int highScore = ScoreManager.HighScore;
+        string hScore = "High Score: " + Utils.AddCommasToNumber(highScore);
+        go.GetComponent<Text>().text = hScore;
+
+        go = GameObject.Find("Label GameOver");
+        if (go != null)
+        {
+            GameOverText = go.GetComponent<Text>();
+        }
+
+        go = GameObject.Find("Label Round Result");
+        if (go != null)
+        {
+            RoundResultText = go.GetComponent<Text>();
+        }
+
+        ShowResultsUI(false);
+    }
+
+    private void ShowResultsUI(bool show)
+    {
+        GameOverText.gameObject.SetActive(show);
+        RoundResultText.gameObject.SetActive(show);
+    }
 }

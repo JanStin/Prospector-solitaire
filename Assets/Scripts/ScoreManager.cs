@@ -72,24 +72,24 @@ public class ScoreManager : MonoBehaviour
         {
             case eScoreEvent.gameWin:          
                 ScoreFromPrevRound = _score;
-                print("You won this round! Round score: " + ScoreFromPrevRound);
+                //print("You won this round! Round score: " + ScoreFromPrevRound);
                 break;
 
             case eScoreEvent.gameLose:
                 if (HighScore <= _score)
                 {
-                    print("New higt score: " + _score);
+                    //print("New higt score: " + _score);
                     HighScore = _score;
                     PlayerPrefs.SetInt("ProspectorHighScore", _score);
                 }
-                else
-                {
-                    print("Final score: " + _score);
-                }
+                //else
+                //{
+                //    print("Final score: " + _score);
+                //}
                 break;
 
             default:
-                print($"score: {_score} scoreRun: {_scoreRun} chain: {_chain}");
+                //print($"score: {_score} scoreRun: {_scoreRun} chain: {_chain}");
                 break;
         }
     }
